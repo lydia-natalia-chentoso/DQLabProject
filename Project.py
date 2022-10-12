@@ -37,9 +37,26 @@ chart = alt.Chart(df).mark_line().encode(
   x=alt.X('Tahun:N'),
   y=alt.Y('value:Q'),
   color=alt.Color("Media:N")
-).properties(title="Persentase Rumah Tangga yang Pernah Mengakses Internet",height=300)
+).properties(title="Persentase Rumah Tangga yang Pernah Mengakses Internet")
 col1.altair_chart(chart, use_container_width=True)
 col1.caption("Sumber: BPS, Survei Sosial Ekonomi Nasional (Susenas). Catatan: - Pembagi adalah total rumah tangga yang mengakses internet")
 
 col2.write('<div style = "background-color:white;color:black; padding:15px;">Beberapa tahun terakhir, masyarakat yang mengakses internet didominasi oleh penggunaan media telepon seluler dan dapat dilihat penggunaan media telepon seluler terus meningkat setiap tahunnya. Bila dibandingkan dengan media lainnya, jelas signifikan berbeda, karena media lain mengalami penurun setiap tahunnya.<br> Tentunya dengan dominasi tersebut menyatakan bahwa telepon seluler adalah media terbesar yang digunakan oleh masyarakat dalam mengakses internet. <b>Tetapi yang menjadi pertanyaan besar, apakah seluruh daerah di Indonesia memiliki sinyal untuk mengakses internet?</b></div>', unsafe_allow_html=True)
 #st.bar_chart(data=None, *, x=None, y=None, width=0, height=0, use_container_width=True)
+
+st.header('Berapa banyak kelurahan/desa di Indonesia yang tidak mendapatkan sinyal?')
+
+col11,col12 = st.columns(2)
+df2 = pd.read_excel("Source/Data/TidakAdaSinyal.xlsx")
+col12.write(df2)
+df2 = df2.melt('Provinsi', var_name='Tahun', value_name='value')
+chart2 = alt.Chart(df2).mark_line().encode(
+  x=alt.X('Tahun:N'),
+  y=alt.Y('value:Q'),
+  color=alt.Color("Provinsi:N")
+).properties(title="Banyaknya Desa/Kelurahan yang tidak mendapatkan sinyal telekomunikasi")
+col11.altair_chart(chart2, use_container_width=True)
+st.caption("Sumber: BPS, Pendataan Potensi Desa")
+
+
+st.write('<div style = "background-color:white;color:black; padding:15px;">Pada grafik dan table diatas dapat dilihat bahawa setiap tahunnya hampir diseluruh daerah di Indonesia, banyak desa / kelurahan tanpa sinyal mengalami trend penurunan, dalam arti setiap tahun pemerintah dan swasta terus mengembangkan dan membangun jaringan (Base Transceiver Station) sehingga mengurangi daerah terisolir sinyal. Pengembangan dari sisi infrastruktur yang dilakukan terus berlanjut dan memberikan nilai positif. <b>Lalu apakah keterampilan masyarakat akan teknologi informasi dan komputer juga ikut berkolerasi?</b></div>', unsafe_allow_html=True)
