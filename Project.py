@@ -43,7 +43,3 @@ col1.caption("Sumber: BPS, Survei Sosial Ekonomi Nasional (Susenas). Catatan: - 
 
 col2.write('<div style = "background-color:white;color:black; padding:15px;">Beberapa tahun terakhir, masyarakat yang mengakses internet didominasi oleh penggunaan media telepon seluler dan dapat dilihat penggunaan media telepon seluler terus meningkat setiap tahunnya. Bila dibandingkan dengan media lainnya, jelas signifikan berbeda, karena media lain mengalami penurun setiap tahunnya.<br> Tentunya dengan dominasi tersebut menyatakan bahwa telepon seluler adalah media terbesar yang digunakan oleh masyarakat dalam mengakses internet. <b>Tetapi yang menjadi pertanyaan besar, apakah seluruh daerah di Indonesia memiliki sinyal untuk mengakses internet?</b></div>', unsafe_allow_html=True)
 #st.bar_chart(data=None, *, x=None, y=None, width=0, height=0, use_container_width=True)
-
-
-
-st.write("Penulis:", st.secrets["author_name"])
