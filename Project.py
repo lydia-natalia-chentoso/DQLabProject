@@ -142,6 +142,7 @@ kolerasiMerge.columns = ['Provinsi - Tahun', 'Akses internet', 'Kemampuan TIK']
 col31,col32 = st.columns(2)
 col31.write(kolerasiMerge)
 
+
 chart4 = alt.Chart(kolerasiMerge, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).mark_circle(size=60).encode(
     alt.X('Akses internet',axis=alt.Axis(title='Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)')),
     alt.Y('Kemampuan TIK',axis=alt.Axis(title='Proporsi Masyarakat Dengan Keterampilan TIK')),
@@ -157,11 +158,13 @@ correlation = kolerasiMerge.corr(method='pearson')
 #correlation.columns['Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)','Proporsi Masyarakat Dengan Keterampilan TIK']
 col41.write(correlation)
 #col31.write("Nilai Kolerasi : "+correlation.iloc[0,1])
+col41.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">Keterangan :<br>Akses internet : Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)<br>Kemampuan TIK : Proporsi Masyarakat Dengan Keterampilan TIK</div>', unsafe_allow_html=True)
+
 fig, ax = plt.subplots()
 sns.heatmap(correlation, ax=ax)
 col42.write(fig)
 
-col43.write('<div style = "background-color:white;color:black; padding:15px;">Keterangan :<br>0 : Tidak ada korelasi<br>0.00 - 0.25 : korelasi sangat lemah<br>0.25 - 0.50 : korelasi cukup<br>0.50 - 0.75 : korelasi kuat<br>0.75 - 0.99 : korelasi sangat kuat<br>1 : korelasi sempurna</div>', unsafe_allow_html=True)
+col43.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">Keterangan :<br>0 : Tidak ada korelasi<br>0.00 - 0.25 : korelasi sangat lemah<br>0.25 - 0.50 : korelasi cukup<br>0.50 - 0.75 : korelasi kuat<br>0.75 - 0.99 : korelasi sangat kuat<br>1 : korelasi sempurna</div>', unsafe_allow_html=True)
 #chart5 = alt.Chart(correlation).mark_rect().encode(
 #    alt.X('JangkauanSinyal',axis=alt.Axis(title='Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)')),
 #    alt.Y('KemampuanTIK',axis=alt.Axis(title='Proporsi Masyarakat Dengan Keterampilan TIK'))
