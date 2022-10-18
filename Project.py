@@ -78,6 +78,8 @@ provinsi2Selected = st.multiselect(
 st.caption("*Hapus semua pilihan provinsi untuk melihat semua provinsi. Pilih 'INDONESIA' untuk melihat data Indonesia.")
 col11,col12 = st.columns(2)
 
+allDataSinyal = df2.melt('Provinsi', var_name='Tahun', value_name='value')
+
 if provinsi2Selected:
     df2 = df2[df2['Provinsi'].isin(provinsi2Selected)]
 
@@ -102,6 +104,8 @@ df3 = pd.read_excel("Source/Data/Proporsi Remaja Dan Dewasa Usia 15-59 Tahun Den
 #    "Pilih Provinsi", Provinsis,["INDONESIA"], key="provinsiSelected"
 #)
 #st.caption("*Hapus semua pilihan provinsi untuk melihat semua provinsi. Pilih 'INDONESIA' untuk melihat data Indonesia.")
+allDataTIK = df3.melt('Provinsi', var_name='Tahun', value_name='value')
+
 if provinsi2Selected:
     df3 = df3[df3['Provinsi'].isin(provinsi2Selected)]
 
@@ -210,3 +214,18 @@ if kataCorr != "-" :
             kesimpulan += "<br>Pada data daerah dan tahun yang dipilih menyatakan bahwa Persentase daerah yang dapat akses internet lebih tinggi bila dibandingkan dengan proporsi keterampilan masyarakat akan teknologi informasi dan komputer. Maka dari itu, pemerintah bisa fokus memberikan pelatihan khusus untuk meningkatkan keterampilan TIK diseluruh Indonesia."
         kesimpulan += " Namun alahkah baiknya bila keduanya terus dikembangkan secara beriringan agar setiap daerah di Indonesia lebih cepat dan lebih siap akan Teknologi kedepannya."
     st.write('<div style = "background-color:white;color:black; padding:10px;"><b>KESIMPULAN :</b><br>'+kesimpulan+'</div>', unsafe_allow_html=True)
+
+    col51, col52 = st.columns(2)
+    col51.write("Berikut 5 daerah yang memiliki persentase akses internet terendah per tahun 2021")
+    low5Internet = allDataSinyal[allDataSinyal['Tahun'] == '2021'].sort_values(by=['value']).head()
+    low5Internet = low5Internet[['Provinsi','value']]
+    low5Internet['value'] = round(low5Internet['value'],2)
+    low5Internet.columns = ['Provinsi', 'Persentase Akses Internet Terendah']
+    col51.write(low5Internet)
+    
+    col52.write("Berikut 5 daerah yang memiliki proporsi keterampilan TIK terendah per tahun 2021")
+    low5TIK = allDataTIK[allDataTIK['Tahun'] == '2021'].sort_values(by=['value']).head()
+    low5TIK = low5TIK[['Provinsi','value']]
+    low5TIK['value'] = round(low5TIK['value'],2)
+    low5TIK.columns = ['Provinsi', 'Proporsi keterampilan TIK Terendah']
+    col52.write(low5TIK)
