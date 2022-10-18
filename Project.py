@@ -144,7 +144,7 @@ kolerasiMerge = kolerasiMerge[['Key','value_x','value_y']]
 kolerasiMerge.columns = ['Provinsi - Tahun', 'Akses internet', 'Kemampuan TIK']
 
 col31,col32 = st.columns(2)
-col31.write(kolerasiMerge)
+col31.write(kolerasiMerge.set_index('Provinsi - Tahun'))
 
 
 chart4 = alt.Chart(kolerasiMerge, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).mark_circle(size=60).encode(
@@ -221,11 +221,11 @@ if kataCorr != "-" :
     low5Internet = low5Internet[['Provinsi','value']]
     low5Internet['value'] = round(low5Internet['value'],2)
     low5Internet.columns = ['Provinsi', 'Persentase Akses Internet Terendah']
-    col51.write(low5Internet)
+    col51.write(low5Internet.set_index('Provinsi'))
     
     col52.write("Berikut 5 daerah yang memiliki proporsi keterampilan TIK terendah per tahun 2021")
     low5TIK = allDataTIK[allDataTIK['Tahun'] == '2021'].sort_values(by=['value']).head()
     low5TIK = low5TIK[['Provinsi','value']]
     low5TIK['value'] = round(low5TIK['value'],2)
     low5TIK.columns = ['Provinsi', 'Proporsi keterampilan TIK Terendah']
-    col52.write(low5TIK)
+    col52.write(low5TIK.set_index('Provinsi'))
