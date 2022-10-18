@@ -7,6 +7,7 @@ import altair as alt
 #from sklearn.cluster import KMeans
 import seaborn as sns
 import matplotlib.pyplot as plt
+import math
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -80,7 +81,6 @@ col11,col12 = st.columns(2)
 if provinsi2Selected:
     df2 = df2[df2['Provinsi'].isin(provinsi2Selected)]
 
-#col12.write(df2)
 df2 = df2.melt('Provinsi', var_name='Tahun', value_name='value')
 chart2 = alt.Chart(df2, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).mark_line(point=True).encode(
 x=alt.X('Tahun:N'),
@@ -157,7 +157,10 @@ col41.write("Hasil Korelasi Pearson :")
 correlation = kolerasiMerge.corr(method='pearson')
 #correlation.columns['Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)','Proporsi Masyarakat Dengan Keterampilan TIK']
 col41.write(correlation)
-#col31.write("Nilai Kolerasi : "+correlation.iloc[0,1])
+nilaiCorr = math.nan
+if math.isnan(correlation.iloc[1][0]) != True:
+    col41.write("Nilai Kolerasi : "+str(round(correlation.iloc[1][0],2)))
+    nilaiCorr = round(correlation.iloc[1][0],2)
 col41.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">Keterangan :<br>Akses internet : Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)<br>Kemampuan TIK : Proporsi Masyarakat Dengan Keterampilan TIK</div>', unsafe_allow_html=True)
 
 fig, ax = plt.subplots()
@@ -165,8 +168,45 @@ sns.heatmap(correlation, ax=ax)
 col42.write(fig)
 
 col43.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">Keterangan :<br>0 : Tidak ada korelasi<br>0.00 - 0.25 : korelasi sangat lemah<br>0.25 - 0.50 : korelasi cukup<br>0.50 - 0.75 : korelasi kuat<br>0.75 - 0.99 : korelasi sangat kuat<br>1 : korelasi sempurna</div>', unsafe_allow_html=True)
-#chart5 = alt.Chart(correlation).mark_rect().encode(
-#    alt.X('JangkauanSinyal',axis=alt.Axis(title='Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)')),
-#    alt.Y('KemampuanTIK',axis=alt.Axis(title='Proporsi Masyarakat Dengan Keterampilan TIK'))
-#)
-#st.altair_chart(chart5, use_container_width=True)
+kataCorr = ""
+if nilaiCorr < 0:
+    kataCorr = "BERKORELASI BERLAWANAN"
+elif nilaiCorr == 0:
+    kataCorr = "TIDAK BERKORELASI"
+elif nilaiCorr <= 0.25: 
+    kataCorr = "KORELASI SANGAT LEMAH"
+elif nilaiCorr <= 0.5: 
+    kataCorr = "KORELASI CUKUP"
+elif nilaiCorr <= 0.75: 
+    kataCorr = "KORELASI KUAT"
+elif nilaiCorr <= 0.99: 
+    kataCorr = "KORELASI SANGAT KUAT"
+elif nilaiCorr == 1:
+    kataCorr = "KORELASI SEMPURNA"
+else:
+    kataCorr = "-"
+
+if kataCorr != "-" :
+    rataRataSinyal = round(kolerasiMerge['Akses internet'].mean(),2)
+    rataRataTIK = round(kolerasiMerge['Kemampuan TIK'].mean(),2)
+    kesimpulan = "Berdasarkan daerah dan tahun yang dipilih, menyatakan bahwa korelasi antara Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS) dengan Proporsi Masyarakat Dengan Keterampilan TIK adalah <b>"+kataCorr+"</b>.<br>"
+    if nilaiCorr < 0:
+        kesimpulan += "Sehingga pemerintah harus memilih <b>salah satu</b> antara melakukan pengembangan secara infrastruktur seperti menambahan BTS diberbagai daerah di Indonesia agar setiap daerah mendapatkan sinyal telekomunikasi yang sama rata atau memberikan pelatihan keterampilan teknologi informasi dan komputer untuk daerah-daerah agar keterampilan teknologi informasi dan komputer diseluruh Indonesia merata."
+        kesimpulan += "<br>Nilai rata-rata dari Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS) adalah <b>"+str(rataRataSinyal)+"</b>."
+        kesimpulan += "<br>Nilai rata-rata dari Proporsi Masyarakat Dengan Keterampilan TIK adalah  <b>"+str(rataRataTIK)+"</b>."
+        kesimpulan += "<br>Bila dibandingkan nilai rata-rata tersebut, pemerintah bisa mengambil nilai terendah untuk dapat difokuskan dikembangkan."
+    elif nilaiCorr <= 0.25:
+        kesimpulan += "Sehingga pemerintah bisa terus melakukan pengembangan secara infrastruktur seperti menambahan BTS diberbagai daerah di Indonesia agar setiap daerah mendapatkan sinyal telekomunikasi yang sama rata, namun disisi lain juga harus memberikan pelatihan keterampilan teknologi informasi dan komputer untuk daerah-daerah agar keterampilan teknologi informasi dan komputer diseluruh Indonesia merata."
+        kesimpulan += " Namun alahkah baiknya bila keduanya terus dikembangkan secara beriringan agar setiap daerah di Indonesia lebih cepat dan lebih siap akan Teknologi kedepannya."
+    elif nilaiCorr <= 1:
+        kesimpulan += "Nilai rata-rata dari Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS) adalah <b>"+str(rataRataSinyal)+"</b>."
+        kesimpulan += "<br>Nilai rata-rata dari Proporsi Masyarakat Dengan Keterampilan TIK adalah  <b>"+str(rataRataTIK)+"</b>."
+        kesimpulan += "<br>Bila dibandingkan nilai rata-rata tersebut, pemerintah bisa mengambil nilai terendah untuk dapat difokuskan dikembangkan."
+        if rataRataSinyal < rataRataTIK :
+            kesimpulan += "<br>Pada data daerah dan tahun yang dipilih menyatakan bahwa Persentase daerah yang dapat akses internet lebih rendah bila dibandingkan dengan proporsi keterampilan masyarakat akan teknologi informasi dan komputer. Maka dari itu, pemerintah bisa fokus mengembangkan infrastruktur agar seluruh daerah di Indonesia dapat mendapatkan akses internet dan beriringan keterampilan TIK akan ikut meningkat tanpa diperlukan pelatihan khusus."
+        elif rataRataSinyal == rataRataTIK :
+            kesimpulan += "<br>Pada data daerah dan tahun yang dipilih menyatakan bahwa Persentase daerah yang dapat akses internet sama dengan proporsi keterampilan masyarakat akan teknologi informasi dan komputer. Maka dari itu, pemerintah bisa fokus mengembangkan infrastruktur agar seluruh daerah di Indonesia dapat mendapatkan akses internet dan beriringan memberikan pelatihan khusus agar keterampilan TIK akan ikut meningkat."
+        elif rataRataSinyal > rataRataTIK :
+            kesimpulan += "<br>Pada data daerah dan tahun yang dipilih menyatakan bahwa Persentase daerah yang dapat akses internet lebih tinggi bila dibandingkan dengan proporsi keterampilan masyarakat akan teknologi informasi dan komputer. Maka dari itu, pemerintah bisa fokus memberikan pelatihan khusus untuk meningkatkan keterampilan TIK diseluruh Indonesia."
+        kesimpulan += " Namun alahkah baiknya bila keduanya terus dikembangkan secara beriringan agar setiap daerah di Indonesia lebih cepat dan lebih siap akan Teknologi kedepannya."
+    st.write('<div style = "background-color:white;color:black; padding:10px;"><b>KESIMPULAN :</b><br>'+kesimpulan+'</div>', unsafe_allow_html=True)
