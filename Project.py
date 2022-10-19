@@ -131,7 +131,7 @@ st.write('<div style = "background-color:white;color:black; padding:15px;">Dari 
 st.write('')
 st.subheader('Analisa korelasi antara ketersediaan jaringan telekomunikasi / internet dengan keterampilan teknologi informasi dan komputer (TIK) di Indonesia')
 YearSelected = st.multiselect(
-    "Pilih Tahun", ['2018','2019','2020','2021'], key="YearSelected"
+    "Pilih Tahun", ['2018','2019','2020','2021'],['2020','2021'], key="YearSelected"
 )
 df2['Key'] = df2['Provinsi'] +'-'+ df2['Tahun']
 df3['Key'] = df3['Provinsi'] +'-'+ df3['Tahun']
@@ -144,7 +144,7 @@ kolerasiMerge = kolerasiMerge[['Key','value_x','value_y']]
 kolerasiMerge.columns = ['Provinsi - Tahun', 'Akses internet', 'Kemampuan TIK']
 
 col31,col32 = st.columns(2)
-col31.write(kolerasiMerge.set_index('Provinsi - Tahun'))
+col31.dataframe(kolerasiMerge.set_index('Provinsi - Tahun'),width=400)
 
 
 chart4 = alt.Chart(kolerasiMerge, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).mark_circle(size=60).encode(
@@ -163,15 +163,17 @@ correlation = kolerasiMerge.corr(method='pearson')
 col41.write(correlation)
 nilaiCorr = math.nan
 if math.isnan(correlation.iloc[1][0]) != True:
-    col41.write("Nilai Kolerasi : "+str(round(correlation.iloc[1][0],2)))
+    col41.write("Nilai Kolerasi : <b>"+str(round(correlation.iloc[1][0],2)) +"</b>", unsafe_allow_html=True)
     nilaiCorr = round(correlation.iloc[1][0],2)
-col41.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">Keterangan :<br>Akses internet : Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)<br>Kemampuan TIK : Proporsi Masyarakat Dengan Keterampilan TIK</div>', unsafe_allow_html=True)
 
 fig, ax = plt.subplots()
 sns.heatmap(correlation, ax=ax)
 col42.write(fig)
 
 col43.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">Keterangan :<br>0 : Tidak ada korelasi<br>0.00 - 0.25 : korelasi sangat lemah<br>0.25 - 0.50 : korelasi cukup<br>0.50 - 0.75 : korelasi kuat<br>0.75 - 0.99 : korelasi sangat kuat<br>1 : korelasi sempurna</div>', unsafe_allow_html=True)
+col43.write('')
+col43.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">Keterangan :<br>Akses internet : Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)<br>Kemampuan TIK : Proporsi Masyarakat Dengan Keterampilan TIK</div>', unsafe_allow_html=True)
+
 kataCorr = ""
 if nilaiCorr < 0:
     kataCorr = "BERKORELASI BERLAWANAN"
