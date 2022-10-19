@@ -1,8 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\.streamlit"
+    "\\Source\\Image"
   ],
-  "SelectedNode": "\\.streamlit\\config.toml",
+  "SelectedNode": "\\requirements.txt",
   "PreviewInSolutionExplorer": false
 }

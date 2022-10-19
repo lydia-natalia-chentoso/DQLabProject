@@ -222,6 +222,13 @@ if kataCorr != "-" :
     low5Internet['value'] = round(low5Internet['value'],2)
     low5Internet.columns = ['Provinsi', 'Persentase Akses Internet Terendah']
     col51.write(low5Internet.set_index('Provinsi'))
+
+    col51.write("Berikut 5 daerah yang memiliki persentase akses internet tertinggi per tahun 2021")
+    top5Internet = allDataSinyal[allDataSinyal['Tahun'] == '2021'].sort_values(by=['value'],ascending=False).head()
+    top5Internet = top5Internet[['Provinsi','value']]
+    top5Internet['value'] = round(top5Internet['value'],2)
+    top5Internet.columns = ['Provinsi', 'Persentase Akses Internet Tertinggi']
+    col51.write(top5Internet.set_index('Provinsi'))
     
     col52.write("Berikut 5 daerah yang memiliki proporsi keterampilan TIK terendah per tahun 2021")
     low5TIK = allDataTIK[allDataTIK['Tahun'] == '2021'].sort_values(by=['value']).head()
@@ -229,3 +236,10 @@ if kataCorr != "-" :
     low5TIK['value'] = round(low5TIK['value'],2)
     low5TIK.columns = ['Provinsi', 'Proporsi keterampilan TIK Terendah']
     col52.write(low5TIK.set_index('Provinsi'))
+    
+    col52.write("Berikut 5 daerah yang memiliki proporsi keterampilan TIK tertinggi per tahun 2021")
+    top5TIK = allDataTIK[allDataTIK['Tahun'] == '2021'].sort_values(by=['value'],ascending=False).head()
+    top5TIK = top5TIK[['Provinsi','value']]
+    top5TIK['value'] = round(top5TIK['value'],2)
+    top5TIK.columns = ['Provinsi', 'Proporsi keterampilan TIK Tertinggi']
+    col52.write(top5TIK.set_index('Provinsi'))
