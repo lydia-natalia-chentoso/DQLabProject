@@ -89,7 +89,7 @@ x=alt.X('Tahun:N'),
 y=alt.Y('value:Q'),
 color=alt.Color("Provinsi:N"),
 tooltip=['Provinsi', 'Tahun', 'value']
-).properties(title="Pesentase Desa/Kelurahan yang mendapatkan sinyal telekomunikasi / internet").interactive()
+).properties(title="Persentase Desa/Kelurahan yang mendapatkan sinyal telekomunikasi / internet").interactive()
 col11.altair_chart(chart2, use_container_width=True)
 col11.caption("Sumber: BPS, Pendataan Potensi Desa")
 
