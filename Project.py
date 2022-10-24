@@ -166,13 +166,6 @@ chart4 = alt.Chart(kolerasiMerge, padding={"left": 10, "top": 10, "right": 10, "
 ).interactive()
 col32.altair_chart(chart4, use_container_width=True)
 
-barPerbandingan = alt.Chart(allKolerasiMeger).mark_bar().encode(
-    x='Provinsi',
-    y='Akses internet',
-    color='Tahun:N'
-).interactive()
-col32.altair_chart(barPerbandingan, use_container_width=True)
-
 col41,col42,col43 = st.columns(3)
 col41.write("Hasil Korelasi Pearson :")
 correlation = kolerasiMerge.corr(method='pearson')
