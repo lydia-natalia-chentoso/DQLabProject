@@ -30,35 +30,58 @@ add_bg_from_local('Source/Image/bg1c.jpg')
 HomeContainer = st.container()
 HomeContainer.title("SIAPKAH INDONESIA AKAN TEKNOLOGI?")
 HomeContainer.caption("Lydia Natalia - 'TETRIS PROA : Data Analytics Fast Track' Capstone Project")
-#HomeContainer.write(date.today().strftime("%A, %d %B %Y"))
 HomeContainer.write("Selasa, 18 Oktober 2022")
 
 st.write('<div style = "background-color:white;color:black; padding:15px;">Dunia telah memasuki era Revolusi Industri 4.0 yang sangat berkaitan erat dengan perkembangan teknologi yang sangat pesat, dimana pekerjaan manusia semakin dimudahkan atau bahkan digantikan oleh berbagai macam teknologi-teknologi canggih seperti Robot Otonom (<i>Autonomous Robot</i>), Kendaraan Pintar, <i>Internet of Things</i> (IoT), Kecerdasan Buatan (<i>Artificial Intelligence</i>), <i>Big Data</i>, <i>Augmented Reality</i> (AR) dan lain sebagainya.<br><br> Pada era ini lah, masyarakat ditantang untuk sadar diri dan terus haus untuk mengembangkan keterampilan diri terutama dibidang teknologi informasi dan komputer agar tidak ketinggalan zaman / gagap teknologi karena hampir di semua aspek kehidupan masyarakat bergantung dan terintegrasi melalui teknologi digital dan internet.<br><br> Pandemi Covid-19 yang menghantam Indonesia, tak bisa dipungkiri memaksa masyarakat untuk dapat bertumpuh pada teknologi karena selama pandemi berlangsung, sektor yang masih kuat bertahan dan tetap berkembang adalah sektor industri teknologi informasi dan komunikasi. Dan selama pandemi, konsumsi teknologi digital melalui internet terus meningkat dan dampaknya semakin signifikan dan jelas disetiap aspek kehidupan masyarakat.</div>', unsafe_allow_html=True)
 st.write('')
 
 col1, col2 = st.columns(2)
-#df = pd.read_excel("Source/Data/Persentase Rumah Tangga yang Pernah Mengakses Internet dalam 3 Bulan Terakhir Menurut Media Akses.xlsx")
-#df = df.melt('Media', var_name='Tahun', value_name='value')
+df = pd.read_excel("Source/Data/Persentase Rumah Tangga yang Pernah Mengakses Internet dalam 3 Bulan Terakhir Menurut Media Akses.xlsx")
+df = df.melt('Media', var_name='Tahun', value_name='Akses Internet (%)')
+df = df[df['Tahun'] == '2020']
+
+source = pd.DataFrame(
+    {"Akses Internet": ["Ya", "Tidak"], "value": [78,22]}
+)
+base2 = alt.Chart(source).encode(
+    theta=alt.Theta("value:Q", stack=True), 
+    radius=alt.Radius("value:Q", scale=alt.Scale(type="sqrt", zero=True, rangeMin=20)),
+    color="Akses Internet:N"
+).properties(title="Pernah mengakses internet di Indonesia (2020) (%)",height=300, width=430)
+pie = base2.mark_arc(innerRadius=20, stroke="#fff")
+text = base2.mark_text(radiusOffset=15).encode(text="value:Q")
+PieChart = pie + text
+col1.altair_chart(PieChart)
+
+base = alt.Chart(df).encode(
+    theta=alt.Theta("Akses Internet (%):Q", stack=True),
+    radius=alt.Radius("Akses Internet (%)", scale=alt.Scale(type="sqrt", zero=True, rangeMin=20)),
+    color="Media:N",
+)
+c1 = base.mark_arc(innerRadius=20, stroke="#fff").properties(title="Media mengakses internet di Indonesia (2020) (%)",
+    width=430,
+    height=300)
+c2 = base.mark_text(radiusOffset=15).encode(text="Akses Internet (%):Q")
+chartRadial= c1 + c2
+chartRadial.configure(background='#DDEEFF')
+col2.altair_chart(chartRadial)
+
 #chart = alt.Chart(df).mark_line(point=True).encode(
 #  x=alt.X('Tahun:N'),
-#  y=alt.Y('value:Q'),
+#  y=alt.Y('Akses Internet (%):Q'),
 #  color=alt.Color("Media:N"),
-#tooltip=['Media', 'Tahun', 'value']
+#tooltip=['Media', 'Tahun', 'Akses Internet (%)']
 #).properties(title="Persentase Rumah Tangga yang Pernah Mengakses Internet").interactive()
 #col1.altair_chart(chart, use_container_width=True)
-#col1.caption("Sumber: BPS, Survei Sosial Ekonomi Nasional (Susenas). Catatan: - Pembagi adalah total rumah tangga yang mengakses internet")
 
-col1.image("Source/Image/inet bps.jfif")
-col1.caption("Sumber : https://jakarta.bps.go.id/backend/images/Internet-2020-ind.JPG")
-
+#col1.image("Source/Image/inet bps.jfif")
+#col1.caption("Sumber : https://jakarta.bps.go.id/backend/images/Internet-2020-ind.JPG")
 #col2.write('<div style = "background-color:white;color:black; padding:15px;">Beberapa tahun terakhir, masyarakat yang mengakses internet didominasi oleh penggunaan media telepon seluler dan dapat dilihat penggunaan media telepon seluler terus meningkat setiap tahunnya. Bila dibandingkan dengan media lainnya, jelas signifikan berbeda, karena media lain mengalami penurun setiap tahunnya.<br> Tentunya dengan dominasi tersebut menyatakan bahwa telepon seluler adalah media terbesar yang digunakan oleh masyarakat dalam mengakses internet. <b>Tetapi yang menjadi pertanyaan besar, apakah seluruh daerah di Indonesia dapat mengakses internet?</b></div>', unsafe_allow_html=True)
-col2.write('<div style = "background-color:white;color:black; padding:15px;">Menurut survei pada tahun 2020, penduduk yang berumur diatas 5 tahun yang pernah <u>mengakses internet</u> telah mencapai <b>78%</b>. Dan dilihat dari hasil survei bahwa <b>98%</b> pengguna menggunakan media <u>Ponsel/Telepon seluler</u> untuk mengakses internet.</div>', unsafe_allow_html=True)
-col2.write('')
-col2.write('<div style = "background-color:white;color:black; padding:15px;"><b>Tetapi yang menjadi pertanyaan besar, apakah seluruh daerah di Indonesia dapat mengakses internet? Lalu apakah keterampilan masyarakat akan teknologi informasi dan komputer mendukung? Apakah 2 faktor tersebut berkolerasi?</b></div>', unsafe_allow_html=True)
 
+st.write('<div style = "background-color:white;color:black; padding:15px;">Menurut survei pada tahun 2020, penduduk yang berumur diatas 5 tahun yang pernah <u>mengakses internet</u> telah mencapai <b>78%</b>. Dan dilihat dari hasil survei bahwa <b>98.76%</b> pengguna menggunakan media <u>Ponsel/Telepon seluler</u> untuk mengakses internet.</div>', unsafe_allow_html=True)
 st.write('')
-
-#st.subheader('Persentase kelurahan/desa di Indonesia yang dapat mengakses internet')
+st.write('<div style = "background-color:white;color:black; padding:15px;"><b>Tetapi yang menjadi pertanyaan besar, apakah seluruh daerah di Indonesia dapat mengakses internet? Lalu apakah keterampilan masyarakat akan teknologi informasi dan komputer mendukung? Apakah 2 faktor tersebut berkolerasi?</b></div>', unsafe_allow_html=True)
+st.write('')
 
 df2 = pd.read_excel("Source/Data/TidakAdaSinyal.xlsx")
 df2MasterKelurahan = pd.read_excel("Source/Data/Jumlah Desa_Kelurahan Menurut Provinsi.xlsx")
@@ -73,7 +96,7 @@ df2 = dfMerge[['Provinsi','2014','2018','2019','2020','2021']]
 
 Provinsis2 = df2['Provinsi'].tolist()
 provinsi2Selected = st.multiselect(
-    "Pilih Provinsi", Provinsis2,["INDONESIA"], key="provinsi2Selected"
+    "Pilih Provinsi", Provinsis2,["RATA-RATA INDONESIA"], key="provinsi2Selected"
 )
 st.caption("*Hapus semua pilihan provinsi untuk melihat semua provinsi. Pilih 'INDONESIA' untuk melihat data Indonesia.")
 col11,col12 = st.columns(2)
@@ -86,24 +109,16 @@ if provinsi2Selected:
 df2 = df2.melt('Provinsi', var_name='Tahun', value_name='value')
 chart2 = alt.Chart(df2, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).mark_line(point=True).encode(
 x=alt.X('Tahun:N'),
-y=alt.Y('value:Q'),
+y=alt.Y('value', axis=alt.Axis(title='Percentage')),
 color=alt.Color("Provinsi:N"),
 tooltip=['Provinsi', 'Tahun', 'value']
-).properties(title="Persentase Desa/Kelurahan yang mendapatkan sinyal telekomunikasi / internet").interactive()
+).properties(title="Desa/Kelurahan yang mendapatkan sinyal telekomunikasi / internet").interactive()
 col11.altair_chart(chart2, use_container_width=True)
-col11.caption("Sumber: BPS, Pendataan Potensi Desa")
+#col11.caption("Sumber: BPS, Pendataan Potensi Desa")
 
-st.write('<div style = "background-color:white;color:black; padding:15px;">Sinyal komunikasi adalah hal utama untuk masyarakat dalam mengakses internet. Pada grafik diatas, persentase desa / kelurahan di Indonesia yang memiliki sinyal mengalami trend kenaikan setiap tahunnya, dalam arti setiap tahun pemerintah dan swasta terus mengembangkan dan membangun BTS (<i>Base Transceiver Station</i>) sehingga mengurangi daerah terisolir sinyal. BTS adalah salah satu bentuk infrastruktur telekomunikasi yang berperan penting dalam mewujudkan komunikasi nirkabel antara jaringan operator dengan perangkat komunikasi. Pengembangan dari salah satu infrastruktur BTS yang dilakukan terus berlanjut dan memberikan nilai positif. Selama periode 2014-2021 mengalami kenaikan sebesar <b>3.3%</b>.</div>', unsafe_allow_html=True)
-st.write('')
-#st.subheader('Proporsi Masyarakat Dengan Keterampilan Teknologi Informasi Dan Komputer (TIK) Menurut Provinsi')
+col11.write('<div style = "background-color:white;color:black; padding:15px;">Sinyal komunikasi adalah hal utama untuk masyarakat dalam mengakses internet. Pada grafik diatas, persentase desa / kelurahan di Indonesia yang memiliki sinyal mengalami trend kenaikan setiap tahunnya, dalam arti setiap tahun pemerintah dan swasta terus mengembangkan dan membangun BTS (<i>Base Transceiver Station</i>) sehingga mengurangi daerah terisolir sinyal. BTS adalah salah satu bentuk infrastruktur telekomunikasi yang berperan penting dalam mewujudkan komunikasi nirkabel antara jaringan operator dengan perangkat komunikasi. Pengembangan dari salah satu infrastruktur BTS yang dilakukan terus berlanjut dan memberikan nilai positif. Selama periode 2014-2021, keseluruhan Indonesia mengalami kenaikan sebesar <b>3.3%</b>.</div>', unsafe_allow_html=True)
 
 df3 = pd.read_excel("Source/Data/Proporsi Remaja Dan Dewasa Usia 15-59 Tahun Dengan Keterampilan Teknologi Informasi Dan Komputer (TIK) Menurut Provinsi.xlsx")
-#st.write(df3)
-#Provinsis = df3['Provinsi'].tolist()
-#provinsiSelected = st.multiselect(
-#    "Pilih Provinsi", Provinsis,["INDONESIA"], key="provinsiSelected"
-#)
-#st.caption("*Hapus semua pilihan provinsi untuk melihat semua provinsi. Pilih 'INDONESIA' untuk melihat data Indonesia.")
 allDataTIK = df3.melt('Provinsi', var_name='Tahun', value_name='value')
 
 if provinsi2Selected:
@@ -112,21 +127,14 @@ if provinsi2Selected:
 df3 = df3.melt('Provinsi', var_name='Tahun', value_name='value')
 chart3 = alt.Chart(df3).mark_line(point=True).encode(
 x=alt.X('Tahun:O'),
-y=alt.Y('value:Q'),
+y=alt.Y('value', axis=alt.Axis(title='Percentage')),
 color=alt.Color("Provinsi:N"),
 tooltip=['Provinsi', 'Tahun', 'value']
-).interactive()
+).interactive().properties(title='Keterampilan Teknologi Informasi Dan Komputer (TIK)')
 
-labels3 = alt.Chart(df3).mark_text(align='left', dx=3).encode(
-alt.X('Tahun:O', aggregate='max', axis=alt.Axis(title='Tahun')),
-alt.Y('value:Q', aggregate={'argmax': 'Tahun'}, scale=alt.Scale(type='log'), axis=alt.Axis(title='Value')),
-alt.Text('Provinsi'),
-alt.Color('Provinsi:N', legend=None, scale=alt.Scale(domain=Provinsis2,type='ordinal')), 
-).properties(title='Proporsi Masyarakat Dengan Keterampilan Teknologi Informasi Dan Komputer (TIK)',height=500)
-
-col12.altair_chart(alt.layer(chart3, labels3, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).resolve_scale(color='independent'), use_container_width=True)
-col12.caption("Sumber: BPS. Keterangan : Masyarakat usia 15-59 tahun")
-st.write('<div style = "background-color:white;color:black; padding:15px;">Dari grafik diatas menyatakan hampir diseluruh provinsi di Indonesia, proporsi masyarakat yang memiliki keterampilan teknologi informasi dan komputer (TIK) terus mengalami meningkat. Selama periode 2015-2021, secara keseluruhan di Indonesia mengalami kenaikan sebesar <b>43.13 %</b>.</div>', unsafe_allow_html=True)
+col12.altair_chart(alt.layer(chart3, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).resolve_scale(color='independent'), use_container_width=True)
+#col12.caption("Sumber: BPS. Keterangan : Masyarakat usia 15-59 tahun")
+col12.write('<div style = "background-color:white;color:black; padding:15px;">Dari grafik diatas menyatakan hampir diseluruh provinsi di Indonesia, proporsi masyarakat yang memiliki keterampilan teknologi informasi dan komputer (TIK) terus mengalami meningkat. Selama periode 2015-2021, secara keseluruhan di Indonesia mengalami kenaikan sebesar <b>43.13 %</b>.</div>', unsafe_allow_html=True)
 
 st.write('')
 st.subheader('Analisa korelasi antara ketersediaan jaringan telekomunikasi / internet dengan keterampilan teknologi informasi dan komputer (TIK) di Indonesia')
@@ -140,12 +148,15 @@ btsData = df2[df2['Tahun'].isin(YearSelected)]
 tikData = df3[df3['Tahun'].isin(YearSelected)]
 
 kolerasiMerge = pd.merge(btsData,tikData,on=['Key'])
+allKolerasiMeger = kolerasiMerge[['Provinsi_x','Tahun_x','value_x','value_y']]
+allKolerasiMeger.columns = ['Provinsi','Tahun', 'Akses internet', 'Kemampuan TIK']
+allKolerasiMeger = allKolerasiMeger.sort_values(by=['Provinsi','Tahun'])
+
 kolerasiMerge = kolerasiMerge[['Key','value_x','value_y']]
 kolerasiMerge.columns = ['Provinsi - Tahun', 'Akses internet', 'Kemampuan TIK']
 
 col31,col32 = st.columns(2)
-col31.dataframe(kolerasiMerge.set_index('Provinsi - Tahun'),width=400)
-
+col31.dataframe(allKolerasiMeger.set_index('Provinsi'))
 
 chart4 = alt.Chart(kolerasiMerge, padding={"left": 10, "top": 10, "right": 10, "bottom": 10}).mark_circle(size=60).encode(
     alt.X('Akses internet',axis=alt.Axis(title='Persentase daerah yang dapat akses internet (memiliki sinyal dan BTS)')),
@@ -245,3 +256,6 @@ if kataCorr != "-" :
     top5TIK['value'] = round(top5TIK['value'],2)
     top5TIK.columns = ['Provinsi', 'Proporsi keterampilan TIK Tertinggi']
     col52.write(top5TIK.set_index('Provinsi'))
+
+st.subheader('Referensi')
+st.write('<div style = "background-color:white;color:black; padding:10px; font-size:12px;">1. BPS, https://www.bps.go.id/indicator/28/1447/1/proporsi-remaja-dan-dewasa-usia-15-59-tahun-dengan-keterampilan-teknologi-informasi-dan-komputer-tik-menurut-provinsi.html <br>2. Berdasarkan Laporan BPS Provinsi/Kabupaten/Kota, https://www.bps.go.id/indicator/101/85/1/jumlah-desa.html <br>3. BPS, Survei Sosial Ekonomi Nasional (Susenas), https://www.bps.go.id/indicator/2/402/1/persentase-rumah-tangga-yang-pernah-mengakses-internet-dalam-3-bulan-terakhir-menurut-media-akses.html <br> 4. https://www.bps.go.id/indicator/2/1686/1/banyaknya-desa-kelurahan-yang-memiliki-menara-bts-menurut-provinsi-dan-penerimaan-sinyal-telepon-selular-perkotaan-perdesaan-.html</div>', unsafe_allow_html=True)
