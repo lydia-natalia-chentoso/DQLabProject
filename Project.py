@@ -110,7 +110,7 @@ Provinsis2 = df2['Provinsi'].tolist()
 provinsi2Selected = st.multiselect(
     "Pilih Provinsi", Provinsis2,["RATA-RATA INDONESIA"], key="provinsi2Selected"
 )
-st.caption("*Hapus semua pilihan provinsi untuk melihat semua provinsi. Pilih 'INDONESIA' untuk melihat data Indonesia.")
+st.caption("*Hapus semua pilihan provinsi untuk melihat semua provinsi. Pilih 'RATA-RATA INDONESIA' untuk melihat data Indonesia.")
 col11,col12 = st.columns(2)
 
 allDataSinyal = df2.melt('Provinsi', var_name='Tahun', value_name='value')
